@@ -1,0 +1,42 @@
+<RCC>
+    <qresource prefix="/head">
+        <file>resource/head/0.bmp</file>
+        <file>resource/head/1.bmp</file>
+        <file>resource/head/2.bmp</file>
+        <file>resource/head/3.bmp</file>
+        <file>resource/head/4.bmp</file>
+        <file>resource/head/5.bmp</file>
+        <file>resource/head/6.bmp</file>
+        <file>resource/head/7.bmp</file>
+        <file>resource/head/8.bmp</file>
+        <file>resource/head/9.bmp</file>
+        <file>resource/head/head-48.png</file>
+        <file>resource/head/head-64.png</file>
+    </qresource>
+    <qresource prefix="/common">
+        <file>resource/common/aio_arrow_down.png</file>
+        <file>resource/common/aio_arrow_right.png</file>
+        <file>resource/common/ic_arrow_down.png</file>
+        <file>resource/common/ic_calendar.png</file>
+        <file>resource/common/ic_close.png</file>
+        <file>resource/common/ic_close_white.png</file>
+        <file>resource/common/ic_color.png</file>
+        <file>resource/common/ic_cut.png</file>
+        <file>resource/common/ic_file.png</file>
+        <file>resource/common/ic_font.png</file>
+        <file>resource/common/ic_lock.png</file>
+        <file>resource/common/ic_login_cfg.png</file>
+        <file>resource/common/ic_menu_down.png</file>
+        <file>resource/common/ic_min.png</file>
+        <file>resource/common/ic_min_white.png</file>
+        <file>resource/common/ic_notes.png</file>
+        <file>resource/common/ic_picture.png</file>
+        <file>resource/common/ic_record.png</file>
+        <file>resource/common/ic_setting.png</file>
+        <file>resource/common/ic_smile.png</file>
+        <file>resource/common/ic_sysmen.png</file>
+        <file>resource/common/ic_user.png</file>
+        <file>resource/common/ic_user_add.png</file>
+        <file>resource/common/ic_weather.png</file>
+    </qresource>
+</RCC>
