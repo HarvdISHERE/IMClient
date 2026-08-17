@@ -10,6 +10,7 @@ LoginWidget::LoginWidget(QWidget *parent)
     ,m_chatWidget(nullptr)
 {
     ui->setupUi(this);
+
     ok=false;
     m_t=new QTcpSocket;
     m_proxyWidget = new proxy_setting;
@@ -50,6 +51,7 @@ LoginWidget::LoginWidget(QWidget *parent)
                 ok = true;
                 m_loggedIn = true;
                 m_chatWidget->ui->username_label->setText(account);
+                m_chatWidget->setCurrentUser(account);
                 this->hide();
                 m_chatWidget->show();
                 m_chatWidget->add_UI_Message("服务器","✅ 登录成功");
@@ -204,7 +206,9 @@ void LoginWidget::init_login(){
     if (!file.exists()) {
         return;  // 首次运行，没有配置文件，直接返回
     }
-    file.open(QIODevice::ReadOnly);
+    if(!file.open(QIODevice::ReadOnly)){
+        return;
+    }
     QByteArray jsondata=file.readAll();
     file.close();
     if(jsondata.isEmpty()){

@@ -9,9 +9,9 @@ chat_widget::chat_widget(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowFlag(Qt::FramelessWindowHint);
-
     init_Database();
     setupFriendTree();
+
 }
 
 chat_widget::~chat_widget()
@@ -30,7 +30,6 @@ void chat_widget::init_Database(){
     }
 
     QString dbPath =dataPath +"chat_history.db";
-
     m_db=QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(dbPath);
 
@@ -60,9 +59,19 @@ void chat_widget::createTables(){
     }
 
     query.exec("CREATE INDEX IF NOT EXISTS ind_friend ON messages(friend_name)");
+    success=query.exec(
+        "CREATE TABLE IF NOT EXISTS friends("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "owner TEXT NOT NULL,"
+        "friend_name TEXT NOT NULL,"
+        "UNIQUE(owner, friend_name)"
+        ")"
+        );
 
+    if(!success){
+        QMessageBox::critical(this,"数据库错误","建表失败："+query.lastError().text());
+    }
 }
-
 void chat_widget::add_db_Message(const QString &friendName,const QString &sender,
                                  const QString &content,const QString &timestamp){
     QSqlQuery query(m_db);
@@ -97,18 +106,55 @@ QStringList chat_widget::loadMessages(const QString &friendName){
     return messages;
 }
     // ==================== 初始化好友树 ====================
+void chat_widget::add_db_friends(const QString &owner, const QString &friendName){
+    QSqlQuery query(m_db);
+    query.prepare("INSERT OR IGNORE INTO friends(owner,friend_name)"
+                  "VALUES (:owner,:friend)");
+    query.bindValue(":owner",owner);
+    query.bindValue(":friend",friendName);
+    query.exec();
+}
+
+void chat_widget::delete_db_friends(const QString &owner,const QString friendName){
+    QSqlQuery query(m_db);
+    query.prepare("DELETE FROM friends WHERE owner= :owner AND friend_name=:friend");
+    query.bindValue(":owner",owner);
+    query.bindValue(":friend",friendName);
+    query.exec();
+}
+
+QStringList chat_widget::loadfriends(const QString &owner){
+    QStringList friends;
+    QSqlQuery query(m_db);
+    query.prepare("SELECT friend_name FROM friends WHERE owner=:owner ORDER BY id ASC");
+    query.bindValue(":owner",owner);
+
+    if(query.exec()){
+        while(query.next()){
+            friends.append(query.value(0).toString());
+        }
+    }
+
+    return friends;
+}
 void chat_widget::setupFriendTree()
 {
     // 隐藏表头
     ui->friend_treeWidget->setHeaderHidden(true);
 
     // 创建"我的好友"根节点
-    root = new QTreeWidgetItem(ui->friend_treeWidget);
-    root->setText(0, "好友");
-    root->setExpanded(true);
+    root = ui->friend_treeWidget->topLevelItem(0);
 
+    if(!root){
+        root = new QTreeWidgetItem(ui->friend_treeWidget);
+        root->setText(0, "好友");
+    }
+    root->setExpanded(true);
     // 添加示例好友
-    QStringList friends = {"服务器"};
+    QStringList friends = loadfriends(m_currentUser);
+    if(!friends.contains("服务器")){
+        friends.append("服务器");
+    }
     for (const auto &name : friends) {
         QTreeWidgetItem *friendItem = new QTreeWidgetItem(root);
         friendItem->setText(0, name);
@@ -118,6 +164,17 @@ void chat_widget::setupFriendTree()
     }
 }
 
+void chat_widget::setCurrentUser(const QString &user){
+    m_currentUser = user;
+    ui->username_label->setText(user);
+    // 重新加载好友列表
+    root = ui->friend_treeWidget->topLevelItem(0);
+    if (root) {
+        root->takeChildren();  // 清空现有好友
+    }
+    setupFriendTree();
+
+}
 void chat_widget::on_close_pushButton_clicked()
 {
     this->close();
@@ -257,7 +314,33 @@ void chat_widget::on_addfriend_pushButton_clicked()
     QTreeWidgetItem *friendItem = new QTreeWidgetItem(root);
     friendItem->setText(0, searchname);
     m_chatHistory[searchname] = loadMessages(searchname);
+    add_db_friends(m_currentUser,searchname);
     ui->search_friend->clear();
     root->setExpanded(true);
+}
+
+
+
+
+
+void chat_widget::on_delete_Button_clicked()
+{
+    QTreeWidgetItem *delete_friend=ui->friend_treeWidget->currentItem();
+    if(!delete_friend||delete_friend->parent()==nullptr||delete_friend->text(0)=="服务器") return;
+    QString delete_friend_name=delete_friend->text(0);
+    delete_db_friends(m_currentUser,delete_friend_name);
+    m_chatHistory.remove(delete_friend_name);
+    delete delete_friend;
+    QSqlQuery query(m_db);
+    query.prepare("DELETE FROM messages WHERE friend_name = :friend");
+    query.bindValue(":friend", delete_friend_name);
+    query.exec();
+    ui->history->clear();
+}
+
+
+void chat_widget::on_min_pushButton_clicked()
+{
+    this->showMinimized();
 }
 

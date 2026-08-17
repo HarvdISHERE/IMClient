@@ -46,7 +46,6 @@ private:
     bool ok;
     bool m_loggedIn;
     void init_login();
-    void update_login();
     void saveConfig();
     void clearSavedPassword();
 protected:

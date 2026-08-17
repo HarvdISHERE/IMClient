@@ -28,6 +28,8 @@ public:
     ~chat_widget();
     void onReceiveMessage(const QString &sender, const QString &content);  // 新增
     void add_UI_Message(const QString &sender, const QString &content);
+    void setCurrentUser(const QString &user);
+    QString m_currentUser;
     Ui::chat_widget *ui;
 
 signals:
@@ -43,10 +45,20 @@ private slots:
 
     void on_addfriend_pushButton_clicked();
 
+    void on_delete_Button_clicked();
+
+    void on_min_pushButton_clicked();
+
 private:
     QPoint m_dragOffset;
-    QSqlDatabase m_db;
     QTreeWidgetItem *root;
+
+    void add_db_friends(const QString &owner,const QString &friendName);
+    void delete_db_friends(const QString &owner,const QString friendName);
+    QStringList loadfriends(const QString &owner);
+
+
+    QSqlDatabase m_db;
     void init_Database();
     void createTables();
     void add_db_Message(const QString &friendName, const QString &sender,
