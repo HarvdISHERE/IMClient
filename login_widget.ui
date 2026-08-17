@@ -160,7 +160,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="account_lineEdit"/>
+       <widget class="QLineEdit" name="account_lineEdit">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -174,7 +178,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="password_lineEdit"/>
+       <widget class="QLineEdit" name="password_lineEdit">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

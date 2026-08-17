@@ -39,4 +39,5 @@
         <file>resource/common/ic_user_add.png</file>
         <file>resource/common/ic_weather.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

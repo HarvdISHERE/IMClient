@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.19)
 project(IMClient LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Network)
-
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Network Sql)
 qt_standard_project_setup()
 
 qt_add_resources(IMClient_RES
     resource.qrc
 )
+
 
 qt_add_executable(IMClient
     WIN32 MACOSX_BUNDLE
@@ -28,6 +28,7 @@ target_link_libraries(IMClient
         Qt::Core
         Qt::Widgets
         Qt::Network
+        Qt::Sql
 )
 
 install(TARGETS IMClient

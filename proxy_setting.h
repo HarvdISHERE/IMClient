@@ -13,6 +13,7 @@ class proxy_setting : public QWidget
     Q_OBJECT
 
 public:
+    Ui::proxy_setting *ui;
     explicit proxy_setting(QWidget *parent = nullptr);
     ~proxy_setting();
     QString returnIP();
@@ -26,7 +27,7 @@ private slots:
 
 private:
     QPoint m_dragOffset;
-    Ui::proxy_setting *ui;
+
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
