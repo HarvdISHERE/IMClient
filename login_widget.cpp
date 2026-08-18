@@ -56,18 +56,25 @@ LoginWidget::LoginWidget(QWidget *parent)
                 m_chatWidget->show();
                 m_chatWidget->add_UI_Message("服务器","✅ 登录成功");
             }
-            else if (parts[0] == "SEND_OK") {
+            else if (parts[0] == "SEND_OK"||parts[0] == "OFFLINE_MSG_END") {
                 // 消息发送成功回执，不需要显示
             }
-            else if (parts[0] == "MSG"&& parts.size() >= 3) {
+            else if (parts[0] == "MSG"&& parts.size() >= 4) {
                 // 收到别人发来的消息: MSG\t发送者\t内容
                 QString sender = parts[1];
                 QString content = parts[2];
-                m_chatWidget->onReceiveMessage(sender,content);
+                QString timestamp=parts[3];
+                m_chatWidget->onReceiveMessage(sender,content,timestamp);
             }
             else if (parts[0] == "ERROR") {
                 // 错误信息
-                m_chatWidget->onReceiveMessage("服务器","❌ " + response);
+                m_chatWidget->onReceiveMessage("服务器","❌ " + response,QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss"));
+            }
+            else if(parts[0]=="OFFLINE_MSG"&&parts.size()>=4){
+                QString sender = parts[1];
+                QString content = parts[2];
+                QString timestamp=parts[3];
+                m_chatWidget->onReceiveMessage(sender,content,timestamp);
             }
             else if (ok) {
                 // 其他消息（仅登录后显示）

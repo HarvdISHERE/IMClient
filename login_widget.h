@@ -11,6 +11,8 @@
 #include <QFile>
 #include <QDir>
 #include <QTimer>
+#include <QDateTime>
+#include <QHostAddress>
 class proxy_setting;
 class chat_widget;
 QT_BEGIN_NAMESPACE

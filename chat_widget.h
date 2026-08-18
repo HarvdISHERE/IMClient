@@ -26,7 +26,7 @@ class chat_widget : public QWidget
 public:
     explicit chat_widget(QWidget *parent = nullptr);
     ~chat_widget();
-    void onReceiveMessage(const QString &sender, const QString &content);  // 新增
+    void onReceiveMessage(const QString &sender, const QString &content,const QString &timestamp="");  // 新增
     void add_UI_Message(const QString &sender, const QString &content);
     void setCurrentUser(const QString &user);
     QString m_currentUser;

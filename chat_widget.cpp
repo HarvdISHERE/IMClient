@@ -271,8 +271,9 @@ void chat_widget::add_UI_Message(const QString &sender, const QString &content)
 }
 
 // ==================== 外部调用：收到消息 ====================
-void chat_widget::onReceiveMessage(const QString &sender, const QString &content)
+void chat_widget::onReceiveMessage(const QString &sender, const QString &content,const QString &timestamp)
 {
+    qDebug() << "收到消息:" << sender << content << timestamp;
     // 检查当前正在和谁聊天
     if(!m_chatHistory.contains(sender)){
         m_chatHistory[sender]=QStringList();
@@ -285,7 +286,6 @@ void chat_widget::onReceiveMessage(const QString &sender, const QString &content
     }
 
     QTreeWidgetItem *currentItem = ui->friend_treeWidget->currentItem();
-    QString timestamp=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     QString message = QString("%1: %2").arg(sender).arg(content);
     if (currentItem && currentItem->parent() != nullptr) {
         QString currentFriend = currentItem->text(0);
