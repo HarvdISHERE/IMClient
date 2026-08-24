@@ -1,0 +1,5 @@
+CREATE TABLE friends (
+    owner TEXT NOT NULL,
+    friend_name TEXT NOT NULL,
+    UNIQUE(owner, friend_name)
+);
